@@ -32,6 +32,9 @@ response = client.models.generate_content(
 )
 if response.usage_metadata is None:
     raise RuntimeError("no usage metadata")
+
+for function_call in response.function_calls:
+    print(f"Calling function: {function_call.name}({function_call.args})")
 if args.verbose:
     print("User prompt:", args.user_prompt)
     print("Prompt tokens:", response.usage_metadata.prompt_token_count)
