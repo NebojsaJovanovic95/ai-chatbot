@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from prompts import system_prompt
+
+
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
 if api_key == None:
@@ -19,7 +22,10 @@ messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)]
 
 response = client.models.generate_content(
     model='gemini-2.5-flash',
-    contents=messages
+    contents=messages,
+    config=types.GenerateContentConfig(
+        system_instruction=system_prompt
+    ),
 )
 if response.usage_metadata is None:
     raise RuntimeError("no usage metadata")
